@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asistente de Exámenes y Repositorio IA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        .sidebar {
+            transition: all 0.3s ease;
+        }
+        .sidebar.collapsed {
+            width: 70px;
+        }
+        .sidebar.collapsed .menu-text {
+            display: none;
+        }
+        .main-content {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .chart-container {
+            position: relative;
+            height: 300px;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <!-- Contenedor principal -->
+    <div class="flex h-screen">
+        <!-- Sidebar -->
+        <div class="sidebar bg-blue-800 text-white w-64 flex flex-col">
+            <!-- Logo y título -->
+            <div class="p-4 flex items-center justify-between border-b border-blue-700">
+                <div class="flex items-center">
+                    <i class="fas fa-brain text-2xl text-blue-300 mr-2"></i>
+                    <h1 class="text-xl font-bold">Asistente IA</h1>
+                </div>
+                <button id="toggleSidebar" class="text-blue-300 hover:text-white">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+            
+            <!-- Menú de navegación -->
+            <nav class="flex-1 p-4">
+                <ul class="space-y-2">
+                    <li>
+                        <a href="index.html" class="menu-item flex items-center p-2 rounded-lg bg-blue-700">
+                            <i class="fas fa-tachometer-alt w-6 text-center"></i>
+                            <span class="menu-text ml-3">Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="examenes.html" class="menu-item flex items-center p-2 rounded-lg hover:bg-blue-700">
+                            <i class="fas fa-upload w-6 text-center"></i>
+                            <span class="menu-text ml-3">Subir Material</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="generar.html" class="menu-item flex items-center p-2 rounded-lg hover:bg-blue-700">
+                            <i class="fas fa-file-alt w-6 text-center"></i>
+                            <span class="menu-text ml-3">Generar Examen</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="busqueda.html" class="menu-item flex items-center p-2 rounded-lg hover:bg-blue-700">
+                            <i class="fas fa-search w-6 text-center"></i>
+                            <span class="menu-text ml-3">Búsqueda Semántica</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="reportes.html" class="menu-item flex items-center p-2 rounded-lg hover:bg-blue-700">
+                            <i class="fas fa-chart-bar w-6 text-center"></i>
+                            <span class="menu-text ml-3">Reportes</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="menu-item flex items-center p-2 rounded-lg hover:bg-blue-700">
+                            <i class="fas fa-cog w-6 text-center"></i>
+                            <span class="menu-text ml-3">Configuración</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            
+            <!-- Información del usuario -->
+            <div class="p-4 border-t border-blue-700">
+                <div class="flex items-center">
+                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" 
+                         alt="Usuario" class="w-10 h-10 rounded-full">
+                    <div class="menu-text ml-3">
+                        <p class="font-medium">Prof. Harold Huanca</p>
+                        <p class="text-sm text-blue-300">Docente</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Contenido principal -->
+        <div class="main-content flex-1 flex flex-col overflow-hidden">
+            <!-- Header -->
+            <header class="bg-white shadow-sm p-4 flex justify-between items-center">
+                <h2 class="text-xl font-semibold text-gray-800">Dashboard</h2>
+                <div class="flex items-center space-x-4">
+                    <button class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center">
+                        <i class="fas fa-plus mr-2"></i>
+                        <span>Nuevo Examen</span>
+                    </button>
+                    <div class="relative">
+                        <button class="text-gray-500 hover:text-gray-700">
+                            <i class="fas fa-bell text-xl"></i>
+                            <span class="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">3</span>
+                        </button>
+                    </div>
+                </div>
+            </header>
+            
+            <!-- Contenido del dashboard -->
+            <main class="flex-1 overflow-y-auto p-6">
+                <!-- Tarjetas de resumen -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="bg-white rounded-xl shadow-md p-6 card-hover">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-gray-500 text-sm">Materiales Subidos</p>
+                                <p class="text-3xl font-bold text-gray-800 mt-2">24</p>
+                            </div>
+                            <div class="bg-blue-100 p-3 rounded-lg">
+                                <i class="fas fa-file-pdf text-blue-600 text-xl"></i>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex items-center text-green-500 text-sm">
+                            <i class="fas fa-arrow-up mr-1"></i>
+                            <span>+5 esta semana</span>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow-md p-6 card-hover">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-gray-500 text-sm">Exámenes Generados</p>
+                                <p class="text-3xl font-bold text-gray-800 mt-2">18</p>
+                            </div>
+                            <div class="bg-green-100 p-3 rounded-lg">
+                                <i class="fas fa-file-alt text-green-600 text-xl"></i>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex items-center text-green-500 text-sm">
+                            <i class="fas fa-arrow-up mr-1"></i>
+                            <span>+3 esta semana</span>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow-md p-6 card-hover">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-gray-500 text-sm">Estudiantes Activos</p>
+                                <p class="text-3xl font-bold text-gray-800 mt-2">142</p>
+                            </div>
+                            <div class="bg-purple-100 p-3 rounded-lg">
+                                <i class="fas fa-users text-purple-600 text-xl"></i>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex items-center text-green-500 text-sm">
+                            <i class="fas fa-arrow-up mr-1"></i>
+                            <span>+12 este mes</span>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow-md p-6 card-hover">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-gray-500 text-sm">Tiempo Ahorrado</p>
+                                <p class="text-3xl font-bold text-gray-800 mt-2">36h</p>
+                            </div>
+                            <div class="bg-yellow-100 p-3 rounded-lg">
+                                <i class="fas fa-clock text-yellow-600 text-xl"></i>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex items-center text-green-500 text-sm">
+                            <i class="fas fa-arrow-up mr-1"></i>
+                            <span>+8h esta semana</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Gráficos y contenido principal -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                    <!-- Gráfico de rendimiento -->
+                    <div class="bg-white rounded-xl shadow-md p-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Rendimiento de Estudiantes</h3>
+                        <div class="chart-container">
+                            <canvas id="performanceChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <!-- Progreso del proyecto -->
+                    <div class="bg-white rounded-xl shadow-md p-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Progreso del Proyecto</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-sm font-medium">Repositorio Inteligente</span>
+                                    <span class="text-sm font-medium">85%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                    <div class="bg-blue-600 h-2.5 rounded-full" style="width: 85%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-sm font-medium">Generador de Exámenes</span>
+                                    <span class="text-sm font-medium">70%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                    <div class="bg-green-600 h-2.5 rounded-full" style="width: 70%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-sm font-medium">Análisis de Desempeño</span>
+                                    <span class="text-sm font-medium">60%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                    <div class="bg-purple-600 h-2.5 rounded-full" style="width: 60%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-sm font-medium">Integración LMS</span>
+                                    <span class="text-sm font-medium">30%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                    <div class="bg-yellow-600 h-2.5 rounded-full" style="width: 30%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Acciones rápidas -->
+                <div class="bg-white rounded-xl shadow-md p-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Acciones Rápidas</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <button class="bg-blue-100 text-blue-700 p-4 rounded-lg flex flex-col items-center justify-center hover:bg-blue-200 transition-colors">
+                            <i class="fas fa-upload text-2xl mb-2"></i>
+                            <span>Subir Material</span>
+                        </button>
+                        <button class="bg-green-100 text-green-700 p-4 rounded-lg flex flex-col items-center justify-center hover:bg-green-200 transition-colors">
+                            <i class="fas fa-file-alt text-2xl mb-2"></i>
+                            <span>Generar Examen</span>
+                        </button>
+                        <button class="bg-purple-100 text-purple-700 p-4 rounded-lg flex flex-col items-center justify-center hover:bg-purple-200 transition-colors">
+                            <i class="fas fa-chart-bar text-2xl mb-2"></i>
+                            <span>Ver Reportes</span>
+                        </button>
+                        <button class="bg-yellow-100 text-yellow-700 p-4 rounded-lg flex flex-col items-center justify-center hover:bg-yellow-200 transition-colors">
+                            <i class="fas fa-search text-2xl mb-2"></i>
+                            <span>Búsqueda Semántica</span>
+                        </button>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+
+    <script>
+        // Configurar gráfico y eventos al cargar la página
+        document.addEventListener('DOMContentLoaded', function() {
+            // Configurar el gráfico de rendimiento
+            const ctx = document.getElementById('performanceChart').getContext('2d');
+            const performanceChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun'],
+                    datasets: [{
+                        label: 'Promedio de Calificaciones',
+                        data: [75, 78, 82, 80, 85, 88],
+                        backgroundColor: 'rgba(59, 130, 246, 0.7)',
+                        borderColor: 'rgba(59, 130, 246, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: {
+                                callback: function(value) {
+                                    return value + '%';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            
+            // Manejar el botón de toggle sidebar
+            document.getElementById('toggleSidebar').addEventListener('click', function() {
+                const sidebar = document.querySelector('.sidebar');
+                const mainContent = document.querySelector('.main-content');
+                
+                sidebar.classList.toggle('collapsed');
+                
+                if (sidebar.classList.contains('collapsed')) {
+                    mainContent.classList.add('ml-16');
+                } else {
+                    mainContent.classList.remove('ml-16');
+                }
+            });
+            
+            // Manejar los botones de acciones rápidas
+            document.querySelectorAll('.bg-blue-100, .bg-green-100, .bg-purple-100, .bg-yellow-100').forEach(button => {
+                button.addEventListener('click', function() {
+                    const action = this.querySelector('span').textContent;
+                    
+                    Swal.fire({
+                        title: `${action}`,
+                        text: `Función de ${action.toLowerCase()} en desarrollo.`,
+                        icon: 'info',
+                        confirmButtonText: 'Entendido',
+                        confirmButtonColor: '#3b82f6'
+                    });
+                });
+            });
+            
+            // Manejar los elementos del menú
+            document.querySelectorAll('.menu-item').forEach(item => {
+                item.addEventListener('click', function(e) {
+                    // Remover la clase activa de todos los elementos
+                    document.querySelectorAll('.menu-item').forEach(i => {
+                        i.classList.remove('bg-blue-700');
+                    });
+                    
+                    // Agregar la clase activa al elemento clickeado
+                    this.classList.add('bg-blue-700');
+                });
+            });
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</body>
+</html>

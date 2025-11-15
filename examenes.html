@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subir Material - Asistente IA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        .file-upload-area {
+            border: 2px dashed #d1d5db;
+            transition: all 0.3s ease;
+        }
+        .file-upload-area.dragover {
+            border-color: #3b82f6;
+            background-color: #eff6ff;
+        }
+        .progress-bar {
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <!-- Header -->
+    <header class="bg-white shadow-sm p-4 flex justify-between items-center">
+        <div class="flex items-center">
+            <i class="fas fa-brain text-2xl text-blue-600 mr-2"></i>
+            <h1 class="text-xl font-bold text-gray-800">Asistente de Exámenes IA</h1>
+        </div>
+        <div class="flex items-center space-x-4">
+            <a href="index.html" class="text-blue-600 hover:text-blue-800 flex items-center">
+                <i class="fas fa-arrow-left mr-2"></i>
+                <span>Volver al Dashboard</span>
+            </a>
+            <div class="flex items-center">
+                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" 
+                     alt="Usuario" class="w-8 h-8 rounded-full">
+                <span class="ml-2 text-gray-700">Prof. Harold Huanca</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Contenido principal -->
+    <main class="container mx-auto p-6">
+        <div class="bg-white rounded-xl shadow-md p-6 mb-6">
+            <h2 class="text-2xl font-bold text-gray-800 mb-2">Subir Material Educativo</h2>
+            <p class="text-gray-600">Carga documentos, presentaciones, videos y otros materiales para el repositorio inteligente.</p>
+        </div>
+
+        <!-- Área de carga de archivos -->
+        <div class="bg-white rounded-xl shadow-md p-6 mb-6">
+            <div id="fileUploadArea" class="file-upload-area rounded-lg p-8 text-center cursor-pointer">
+                <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-4"></i>
+                <h3 class="text-xl font-semibold text-gray-700 mb-2">Arrastra tus archivos aquí</h3>
+                <p class="text-gray-500 mb-4">o haz clic para seleccionar archivos</p>
+                <button id="selectFilesBtn" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
+                    Seleccionar Archivos
+                </button>
+                <input type="file" id="fileInput" multiple class="hidden" accept=".pdf,.doc,.docx,.ppt,.pptx,.txt,.mp4,.avi,.mov">
+                <p class="text-sm text-gray-500 mt-4">Formatos soportados: PDF, DOC, PPT, TXT, MP4, AVI, MOV (Máx. 100MB)</p>
+            </div>
+
+            <!-- Archivos seleccionados -->
+            <div id="selectedFiles" class="mt-6 hidden">
+                <h4 class="text-lg font-semibold text-gray-800 mb-4">Archivos seleccionados</h4>
+                <div id="filesList" class="space-y-3"></div>
+            </div>
+        </div>
+
+        <!-- Opciones de clasificación -->
+        <div class="bg-white rounded-xl shadow-md p-6 mb-6">
+            <h3 class="text-lg font-semibold text-gray-800 mb-4">Clasificación del Material</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-gray-700 text-sm font-medium mb-2" for="subject">
+                        Asignatura / Materia
+                    </label>
+                    <select id="subject" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="">Seleccionar asignatura</option>
+                        <option value="matematicas">Matemáticas</option>
+                        <option value="ciencias">Ciencias</option>
+                        <option value="historia">Historia</option>
+                        <option value="lenguaje">Lenguaje y Comunicación</option>
+                        <option value="programacion">Programación</option>
+                        <option value="ingenieria">Ingeniería de Software</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="block text-gray-700 text-sm font-medium mb-2" for="topic">
+                        Tema Principal
+                    </label>
+                    <input type="text" id="topic" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Ej: Derivadas, Segunda Guerra Mundial, POO">
+                </div>
+                
+                <div>
+                    <label class="block text-gray-700 text-sm font-medium mb-2" for="difficulty">
+                        Nivel de Dificultad
+                    </label>
+                    <select id="difficulty" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="">Seleccionar nivel</option>
+                        <option value="basico">Básico</option>
+                        <option value="intermedio">Intermedio</option>
+                        <option value="avanzado">Avanzado</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="block text-gray-700 text-sm font-medium mb-2" for="tags">
+                        Etiquetas (separadas por coma)
+                    </label>
+                    <input type="text" id="tags" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Ej: algebra, ecuaciones, calculo">
+                </div>
+            </div>
+            
+            <div class="mt-4">
+                <label class="block text-gray-700 text-sm font-medium mb-2" for="description">
+                    Descripción del Material
+                </label>
+                <textarea id="description" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Breve descripción del contenido..."></textarea>
+            </div>
+        </div>
+
+        <!-- Procesamiento con IA -->
+        <div class="bg-white rounded-xl shadow-md p-6">
+            <h3 class="text-lg font-semibold text-gray-800 mb-4">Procesamiento con Inteligencia Artificial</h3>
+            <div class="flex items-center mb-4">
+                <input type="checkbox" id="enableIA" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" checked>
+                <label for="enableIA" class="ml-2 block text-sm text-gray-700">
+                    Usar IA para clasificación automática y extracción de conceptos
+                </label>
+            </div>
+            
+            <div class="bg-blue-50 p-4 rounded-lg">
+                <div class="flex items-center">
+                    <i class="fas fa-robot text-blue-500 text-xl mr-3"></i>
+                    <div>
+                        <p class="text-blue-800 font-medium">Clasificación Automática</p>
+                        <p class="text-blue-600 text-sm">La IA analizará el contenido para identificar temas, conceptos clave y nivel de dificultad.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-6 flex justify-end">
+                <button id="uploadBtn" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 font-medium flex items-center">
+                    <i class="fas fa-upload mr-2"></i>
+                    Subir Material al Repositorio
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const fileInput = document.getElementById('fileInput');
+            const fileUploadArea = document.getElementById('fileUploadArea');
+            const selectFilesBtn = document.getElementById('selectFilesBtn');
+            const selectedFiles = document.getElementById('selectedFiles');
+            const filesList = document.getElementById('filesList');
+            const uploadBtn = document.getElementById('uploadBtn');
+            
+            let selectedFilesData = [];
+            
+            // Manejar clic en el área de carga
+            selectFilesBtn.addEventListener('click', function() {
+                fileInput.click();
+            });
+            
+            // Manejar selección de archivos
+            fileInput.addEventListener('change', function(e) {
+                handleFiles(e.target.files);
+            });
+            
+            // Manejar drag and drop
+            fileUploadArea.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                fileUploadArea.classList.add('dragover');
+            });
+            
+            fileUploadArea.addEventListener('dragleave', function() {
+                fileUploadArea.classList.remove('dragover');
+            });
+            
+            fileUploadArea.addEventListener('drop', function(e) {
+                e.preventDefault();
+                fileUploadArea.classList.remove('dragover');
+                handleFiles(e.dataTransfer.files);
+            });
+            
+            // Función para manejar archivos seleccionados
+            function handleFiles(files) {
+                if (files.length > 0) {
+                    selectedFilesData = Array.from(files);
+                    renderFilesList();
+                    selectedFiles.classList.remove('hidden');
+                }
+            }
+            
+            // Renderizar lista de archivos
+            function renderFilesList() {
+                filesList.innerHTML = '';
+                
+                selectedFilesData.forEach((file, index) => {
+                    const fileElement = document.createElement('div');
+                    fileElement.className = 'flex items-center justify-between p-3 bg-gray-50 rounded-lg';
+                    
+                    const fileInfo = document.createElement('div');
+                    fileInfo.className = 'flex items-center';
+                    
+                    const fileIcon = document.createElement('i');
+                    fileIcon.className = getFileIcon(file.type) + ' text-xl mr-3 text-gray-500';
+                    
+                    const fileDetails = document.createElement('div');
+                    fileDetails.innerHTML = `
+                        <p class="font-medium text-gray-800">${file.name}</p>
+                        <p class="text-sm text-gray-500">${formatFileSize(file.size)}</p>
+                    `;
+                    
+                    fileInfo.appendChild(fileIcon);
+                    fileInfo.appendChild(fileDetails);
+                    
+                    const removeBtn = document.createElement('button');
+                    removeBtn.className = 'text-red-500 hover:text-red-700';
+                    removeBtn.innerHTML = '<i class="fas fa-times"></i>';
+                    removeBtn.addEventListener('click', function() {
+                        selectedFilesData.splice(index, 1);
+                        if (selectedFilesData.length === 0) {
+                            selectedFiles.classList.add('hidden');
+                        } else {
+                            renderFilesList();
+                        }
+                    });
+                    
+                    fileElement.appendChild(fileInfo);
+                    fileElement.appendChild(removeBtn);
+                    
+                    filesList.appendChild(fileElement);
+                });
+            }
+            
+            // Obtener icono según tipo de archivo
+            function getFileIcon(fileType) {
+                if (fileType.includes('pdf')) return 'fas fa-file-pdf';
+                if (fileType.includes('word') || fileType.includes('document')) return 'fas fa-file-word';
+                if (fileType.includes('powerpoint') || fileType.includes('presentation')) return 'fas fa-file-powerpoint';
+                if (fileType.includes('text')) return 'fas fa-file-alt';
+                if (fileType.includes('video')) return 'fas fa-file-video';
+                return 'fas fa-file';
+            }
+            
+            // Formatear tamaño de archivo
+            function formatFileSize(bytes) {
+                if (bytes === 0) return '0 Bytes';
+                const k = 1024;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            }
+            
+            // Manejar subida de archivos
+            uploadBtn.addEventListener('click', function() {
+                if (selectedFilesData.length === 0) {
+                    Swal.fire({
+                        title: 'Sin archivos',
+                        text: 'Por favor, selecciona al menos un archivo para subir.',
+                        icon: 'warning',
+                        confirmButtonText: 'Entendido',
+                        confirmButtonColor: '#3b82f6'
+                    });
+                    return;
+                }
+                
+                // Simular proceso de subida
+                simulateUpload();
+            });
+            
+            // Simular proceso de subida
+            function simulateUpload() {
+                let progress = 0;
+                const uploadInterval = setInterval(() => {
+                    progress += 5;
+                    
+                    if (progress >= 100) {
+                        clearInterval(uploadInterval);
+                        
+                        Swal.fire({
+                            title: '¡Material subido exitosamente!',
+                            text: `${selectedFilesData.length} archivo(s) han sido procesados y agregados al repositorio inteligente.`,
+                            icon: 'success',
+                            confirmButtonText: 'Continuar',
+                            confirmButtonColor: '#3b82f6'
+                        }).then(() => {
+                            // Resetear formulario
+                            selectedFilesData = [];
+                            selectedFiles.classList.add('hidden');
+                            fileInput.value = '';
+                            document.getElementById('subject').value = '';
+                            document.getElementById('topic').value = '';
+                            document.getElementById('difficulty').value = '';
+                            document.getElementById('tags').value = '';
+                            document.getElementById('description').value = '';
+                        });
+                    }
+                }, 100);
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Búsqueda Semántica - Asistente IA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body class="bg-gray-100">
+    <!-- Header -->
+    <header class="bg-white shadow-sm p-4 flex justify-between items-center">
+        <div class="flex items-center">
+            <i class="fas fa-brain text-2xl text-blue-600 mr-2"></i>
+            <h1 class="text-xl font-bold text-gray-800">Asistente de Exámenes IA</h1>
+        </div>
+        <div class="flex items-center space-x-4">
+            <a href="index.html" class="text-blue-600 hover:text-blue-800 flex items-center">
+                <i class="fas fa-arrow-left mr-2"></i>
+                <span>Volver al Dashboard</span>
+            </a>
+            <div class="flex items-center">
+                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" 
+                     alt="Usuario" class="w-8 h-8 rounded-full">
+                <span class="ml-2 text-gray-700">Prof. Harold Huanca</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Contenido principal -->
+    <main class="container mx-auto p-6">
+        <div class="bg-white rounded-xl shadow-md p-6 mb-6">
+            <h2 class="text-2xl font-bold text-gray-800 mb-2">Búsqueda Semántica con IA</h2>
+            <p class="text-gray-600">Encuentra materiales educativos por concepto, no solo por palabras clave. La IA entiende el significado detrás de tu búsqueda.</p>
+        </div>
+
+        <!-- Barra de búsqueda semántica -->
+        <div class="bg-white rounded-xl shadow-md p-6 mb-6">
+            <div class="flex flex-col md:flex-row md:items-end space-y-4 md:space-y-0 md:space-x-4">
+                <div class="flex-1">
+                    <label class="block text-gray-700 text-sm font-medium mb-2" for="semanticSearch">
+                        ¿Qué concepto estás buscando?
+                    </label>
+                    <div class="relative">
+                        <input type="text" id="semanticSearch" 
+                               class="w-full px-4 py-3 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                               placeholder="Ej: ecuaciones de segundo grado, fotosíntesis, revolución industrial...">
+                        <i class="fas fa-search absolute right-3 top-3 text-gray-400"></i>
+                    </div>
+                    <p class="text-sm text-gray-500 mt-1">La IA buscará materiales relacionados semánticamente, no solo coincidencias exactas de palabras.</p>
+                </div>
+                
+                <div>
+                    <button id="searchBtn" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 font-medium flex items-center">
+                        <i class="fas fa-search mr-2"></i>
+                        Buscar Semánticamente
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Filtros avanzados -->
+            <div class="mt-6 border-t border-gray-200 pt-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-gray-800">Filtros Avanzados</h3>
+                    <button id="toggleFilters" class="text-blue-600 hover:text-blue-800 text-sm flex items-center">
+                        <i class="fas fa-sliders-h mr-1"></i>
+                        Mostrar filtros
+                    </button>
+                </div>
+                
+                <div id="filtersContainer" class="hidden grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div>
+                        <label class="block text-gray-700 text-sm font-medium mb-2" for="filterSubject">
+                            Asignatura
+                        </label>
+                        <select id="filterSubject" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="all">Todas las asignaturas</option>
+                            <option value="matematicas">Matemáticas</option>
+                            <option value="ciencias">Ciencias</option>
+                            <option value="historia">Historia</option>
+                            <option value="lenguaje">Lenguaje</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-gray-700 text-sm font-medium mb-2" for="filterType">
+                            Tipo de Material
+                        </label>
+                        <select id="filterType" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="all">Todos los tipos</option>
+                            <option value="pdf">Documentos PDF</option>
+                            <option value="video">Videos</option>
+                            <option value="presentation">Presentaciones</option>
+                            <option value="text">Textos</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-gray-700 text-sm font-medium mb-2" for="filterDifficulty">
+                            Nivel de Dificultad
+                        </label>
+                        <select id="filterDifficulty" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="all">Todos los niveles</option>
+                            <option value="basico">Básico</option>
+                            <option value="intermedio">Intermedio</option>
+                            <option value="avanzado">Avanzado</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-gray-700 text-sm font-medium mb-2" for="filterDate">
+                            Fecha de Publicación
+                        </label>
+                        <select id="filterDate" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="all">Cualquier fecha</option>
+                            <option value="week">Última semana</option>
+                            <option value="month">Último mes</option>
+                            <option value="year">Último año</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Resultados de búsqueda -->
+        <div class="bg-white rounded-xl shadow-md p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-lg font-semibold text-gray-800">Resultados de Búsqueda Semántica</h3>
+                <div class="text-sm text-gray-500">
+                    <span id="resultsCount">0</span> materiales encontrados
+                </div>
+            </div>
+            
+            <!-- Explicación de IA -->
+            <div id="searchExplanation" class="bg-blue-50 p-4 rounded-lg mb-6 hidden">
+                <div class="flex items-start">
+                    <i class="fas fa-robot text-blue-500 text-xl mr-3 mt-1"></i>
+                    <div>
+                        <p class="font-medium text-blue-800 mb-1">Búsqueda semántica activada</p>
+                        <p id="explanationText" class="text-blue-700 text-sm">La IA está buscando materiales relacionados con tu consulta basándose en el significado, no solo en palabras clave exactas.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Lista de resultados -->
+            <div id="searchResults" class="space-y-4">
+                <div class="text-center py-12 text-gray-500">
+                    <i class="fas fa-search text-4xl mb-4"></i>
+                    <p>Ingresa un concepto en la barra de búsqueda para encontrar materiales educativos relevantes.</p>
+                    <p class="text-sm mt-2">Ejemplo: "resolver ecuaciones" encontrará materiales sobre álgebra, matemáticas básicas y métodos de solución.</p>
+                </div>
+            </div>
+            
+            <!-- Sugerencias de búsqueda -->
+            <div class="mt-8 border-t border-gray-200 pt-6">
+                <h4 class="font-medium text-gray-800 mb-3">Sugerencias de búsqueda:</h4>
+                <div class="flex flex-wrap gap-2">
+                    <button class="semantic-suggestion bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm hover:bg-gray-200">
+                        teorema de Pitágoras
+                    </button>
+                    <button class="semantic-suggestion bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm hover:bg-gray-200">
+                        células y organismos
+                    </button>
+                    <button class="semantic-suggestion bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm hover:bg-gray-200">
+                        guerras mundiales
+                    </button>
+                    <button class="semantic-suggestion bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm hover:bg-gray-200">
+                        gramática española
+                    </button>
+                    <button class="semantic-suggestion bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm hover:bg-gray-200">
+                        programación básica
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('semanticSearch');
+            const searchBtn = document.getElementById('searchBtn');
+            const toggleFilters = document.getElementById('toggleFilters');
+            const filtersContainer = document.getElementById('filtersContainer');
+            const searchExplanation = document.getElementById('searchExplanation');
+            const explanationText = document.getElementById('explanationText');
+            const searchResults = document.getElementById('searchResults');
+            const resultsCount = document.getElementById('resultsCount');
+            const semanticSuggestions = document.querySelectorAll('.semantic-suggestion');
+            
+            // Datos de ejemplo para resultados de búsqueda
+            const sampleMaterials = [
+                {
+                    id: 1,
+                    title: "Introducción a las Ecuaciones Algebraicas",
+                    type: "pdf",
+                    subject: "matematicas",
+                    difficulty: "basico",
+                    description: "Documento que explica los fundamentos de las ecuaciones algebraicas con ejemplos prácticos.",
+                    concepts: ["ecuaciones", "álgebra", "matemáticas básicas", "resolución de problemas"],
+                    date: "2024-02-15",
+                    relevance: 95
+                },
+                {
+                    id: 2,
+                    title: "Video: Resolución de Ecuaciones Cuadráticas",
+                    type: "video",
+                    subject: "matematicas",
+                    difficulty: "intermedio",
+                    description: "Tutorial en video que muestra paso a paso cómo resolver ecuaciones de segundo grado.",
+                    concepts: ["ecuaciones cuadráticas", "fórmula general", "álgebra", "matemáticas"],
+                    date: "2024-01-20",
+                    relevance: 88
+                },
+                {
+                    id: 3,
+                    title: "Problemas de Álgebra con Soluciones",
+                    type: "pdf",
+                    subject: "matematicas",
+                    difficulty: "intermedio",
+                    description: "Colección de problemas algebraicos con soluciones detalladas para práctica.",
+                    concepts: ["problemas algebraicos", "práctica", "ejercicios", "álgebra"],
+                    date: "2024-03-05",
+                    relevance: 82
+                },
+                {
+                    id: 4,
+                    title: "Presentación: Historia del Álgebra",
+                    type: "presentation",
+                    subject: "matematicas",
+                    difficulty: "avanzado",
+                    description: "Presentación sobre los orígenes y desarrollo histórico del álgebra como disciplina matemática.",
+                    concepts: ["historia matemáticas", "álgebra", "evolución", "matemáticos"],
+                    date: "2023-11-10",
+                    relevance: 75
+                },
+                {
+                    id: 5,
+                    title: "Guía de Estudio: Expresiones Algebraicas",
+                    type: "text",
+                    subject: "matematicas",
+                    difficulty: "basico",
+                    description: "Guía completa para entender y trabajar con expresiones algebraicas básicas.",
+                    concepts: ["expresiones algebraicas", "variables", "términos", "álgebra básica"],
+                    date: "2024-02-28",
+                    relevance: 90
+                }
+            ];
+            
+            // Mostrar/ocultar filtros
+            toggleFilters.addEventListener('click', function() {
+                filtersContainer.classList.toggle('hidden');
+                if (filtersContainer.classList.contains('hidden')) {
+                    toggleFilters.innerHTML = '<i class="fas fa-sliders-h mr-1"></i> Mostrar filtros';
+                } else {
+                    toggleFilters.innerHTML = '<i class="fas fa-times mr-1"></i> Ocultar filtros';
+                }
+            });
+            
+            // Realizar búsqueda
+            searchBtn.addEventListener('click', performSearch);
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    performSearch();
+                }
+            });
+            
+            // Sugerencias de búsqueda
+            semanticSuggestions.forEach(button => {
+                button.addEventListener('click', function() {
+                    searchInput.value = this.textContent;
+                    performSearch();
+                });
+            });
+            
+            // Función para realizar búsqueda
+            function performSearch() {
+                const query = searchInput.value.trim();
+                
+                if (!query) {
+                    Swal.fire({
+                        title: 'Búsqueda vacía',
+                        text: 'Por favor, ingresa un concepto para buscar.',
+                        icon: 'warning',
+                        confirmButtonText: 'Entendido',
+                        confirmButtonColor: '#3b82f6'
+                    });
+                    return;
+                }
+                
+                // Mostrar explicación de IA
+                searchExplanation.classList.remove('hidden');
+                explanationText.textContent = `Buscando materiales relacionados con "${query}" basándose en significado semántico.`;
+                
+                // Mostrar carga
+                Swal.fire({
+                    title: 'Buscando con IA',
+                    text: 'Analizando conceptos y buscando materiales relevantes...',
+                    icon: 'info',
+                    showConfirmButton: false,
+                    allowOutsideClick: false
+                });
+                
+                // Simular proceso de búsqueda semántica
+                setTimeout(() => {
+                    Swal.close();
+                    displaySearchResults(query);
+                }, 1500);
+            }
+            
+            // Mostrar resultados de búsqueda
+            function displaySearchResults(query) {
+                // Filtrar materiales (en un caso real, esto se haría en el backend)
+                const filteredMaterials = sampleMaterials.filter(material => {
+                    return material.concepts.some(concept => 
+                        concept.toLowerCase().includes(query.toLowerCase()) ||
+                        query.toLowerCase().includes(concept.toLowerCase())
+                    );
+                });
+                
+                // Actualizar contador
+                resultsCount.textContent = filteredMaterials.length;
+                
+                // Mostrar resultados
+                if (filteredMaterials.length === 0) {
+                    searchResults.innerHTML = `
+                        <div class="text-center py-8 text-gray-500">
+                            <i class="fas fa-search-minus text-3xl mb-3"></i>
+                            <p>No se encontraron materiales que coincidan con "${query}".</p>
+                            <p class="text-sm mt-2">Intenta con otros términos o conceptos relacionados.</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                searchResults.innerHTML = '';
+                
+                filteredMaterials.forEach(material => {
+                    const materialElement = document.createElement('div');
+                    materialElement.className = 'border border-gray-200 rounded-lg p-4 hover:bg-gray-50';
+                    
+                    const typeIcon = getTypeIcon(material.type);
+                    const difficultyBadge = getDifficultyBadge(material.difficulty);
+                    const relevanceBar = getRelevanceBar(material.relevance);
+                    
+                    materialElement.innerHTML = `
+                        <div class="flex justify-between items-start mb-2">
+                            <div class="flex items-start">
+                                ${typeIcon}
+                                <div class="ml-3">
+                                    <h4 class="font-semibold text-gray-800">${material.title}</h4>
+                                    <div class="flex items-center mt-1 space-x-2">
+                                        <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">${material.subject}</span>
+                                        ${difficultyBadge}
+                                        <span class="text-xs text-gray-500">${formatDate(material.date)}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <span class="text-sm font-medium text-gray-700">${material.relevance}% relevancia</span>
+                                ${relevanceBar}
+                            </div>
+                        </div>
+                        
+                        <p class="text-gray-600 text-sm mb-3">${material.description}</p>
+                        
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <span class="text-xs text-gray-500">Conceptos relacionados:</span>
+                                <div class="flex flex-wrap gap-1 mt-1">
+                                    ${material.concepts.map(concept => 
+                                        `<span class="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">${concept}</span>`
+                                    ).join('')}
+                                </div>
+                            </div>
+                            <div class="flex space-x-2">
+                                <button class="text-blue-600 hover:text-blue-800 text-sm flex items-center">
+                                    <i class="fas fa-eye mr-1"></i>
+                                    Ver
+                                </button>
+                                <button class="text-green-600 hover:text-green-800 text-sm flex items-center">
+                                    <i class="fas fa-download mr-1"></i>
+                                    Descargar
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    
+                    searchResults.appendChild(materialElement);
+                });
+            }
+            
+            // Funciones auxiliares
+            function getTypeIcon(type) {
+                const icons = {
+                    'pdf': '<i class="fas fa-file-pdf text-red-500 text-xl"></i>',
+                    'video': '<i class="fas fa-file-video text-purple-500 text-xl"></i>',
+                    'presentation': '<i class="fas fa-file-powerpoint text-orange-500 text-xl"></i>',
+                    'text': '<i class="fas fa-file-alt text-blue-500 text-xl"></i>'
+                };
+                return icons[type] || '<i class="fas fa-file text-gray-500 text-xl"></i>';
+            }
+            
+            function getDifficultyBadge(difficulty) {
+                const colors = {
+                    'basico': 'green',
+                    'intermedio': 'yellow',
+                    'avanzado': 'red'
+                };
+                const text = {
+                    'basico': 'Básico',
+                    'intermedio': 'Intermedio',
+                    'avanzado': 'Avanzado'
+                };
+                return `<span class="text-xs bg-${colors[difficulty]}-100 text-${colors[difficulty]}-800 px-2 py-1 rounded">${text[difficulty]}</span>`;
+            }
+            
+            function getRelevanceBar(relevance) {
+                let color = 'green';
+                if (relevance < 70) color = 'yellow';
+                if (relevance < 50) color = 'red';
+                
+                return `
+                    <div class="w-20 bg-gray-200 rounded-full h-2 mt-1">
+                        <div class="bg-${color}-500 h-2 rounded-full" style="width: ${relevance}%"></div>
+                    </div>
+                `;
+            }
+            
+            function formatDate(dateString) {
+                const options = { year: 'numeric', month: 'short', day: 'numeric' };
+                return new Date(dateString).toLocaleDateString('es-ES', options);
+            }
+        });
+    </script>
+</body>
+</html>

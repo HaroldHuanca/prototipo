@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reportes - Asistente IA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-100">
+    <!-- Header -->
+    <header class="bg-white shadow-sm p-4 flex justify-between items-center">
+        <div class="flex items-center">
+            <i class="fas fa-brain text-2xl text-blue-600 mr-2"></i>
+            <h1 class="text-xl font-bold text-gray-800">Asistente de Exámenes IA</h1>
+        </div>
+        <div class="flex items-center space-x-4">
+            <a href="index.html" class="text-blue-600 hover:text-blue-800 flex items-center">
+                <i class="fas fa-arrow-left mr-2"></i>
+                <span>Volver al Dashboard</span>
+            </a>
+            <div class="flex items-center">
+                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" 
+                     alt="Usuario" class="w-8 h-8 rounded-full">
+                <span class="ml-2 text-gray-700">Prof. Harold Huanca</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Contenido principal -->
+    <main class="container mx-auto p-6">
+        <div class="bg-white rounded-xl shadow-md p-6 mb-6">
+            <h2 class="text-2xl font-bold text-gray-800 mb-2">Reportes y Análisis de Desempeño</h2>
+            <p class="text-gray-600">Visualiza el rendimiento de estudiantes y obtén insights accionables con análisis de IA.</p>
+        </div>
+
+        <!-- Filtros -->
+        <div class="bg-white rounded-xl shadow-md p-6 mb-6">
+            <h3 class="text-lg font-semibold text-gray-800 mb-4">Filtros de Reporte</h3>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div>
+                    <label class="block text-gray-700 text-sm font-medium mb-2" for="reportSubject">
+                        Asignatura
+                    </label>
+                    <select id="reportSubject" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="all">Todas las asignaturas</option>
+                        <option value="matematicas">Matemáticas</option>
+                        <option value="ciencias">Ciencias</option>
+                        <option value="historia">Historia</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="block text-gray-700 text-sm font-medium mb-2" for="reportStudent">
+                        Estudiante
+                    </label>
+                    <select id="reportStudent" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="all">Todos los estudiantes</option>
+                        <option value="ana">Ana Rodríguez</option>
+                        <option value="carlos">Carlos Méndez</option>
+                        <option value="maria">María González</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="block text-gray-700 text-sm font-medium mb-2" for="dateFrom">
+                        Desde
+                    </label>
+                    <input type="date" id="dateFrom" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                
+                <div>
+                    <label class="block text-gray-700 text-sm font-medium mb-2" for="dateTo">
+                        Hasta
+                    </label>
+                    <input type="date" id="dateTo" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+            </div>
+            
+            <div class="mt-4 flex justify-end">
+                <button id="generateReportBtn" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 flex items-center">
+                    <i class="fas fa-chart-bar mr-2"></i>
+                    Generar Reporte
+                </button>
+            </div>
+        </div>
+
+        <!-- Métricas principales -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+            <div class="bg-white rounded-xl shadow-md p-6">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-gray-500 text-sm">Promedio General</p>
+                        <p class="text-3xl font-bold text-gray-800 mt-2">78.5%</p>
+                    </div>
+                    <div class="bg-blue-100 p-3 rounded-lg">
+                        <i class="fas fa-chart-line text-blue-600 text-xl"></i>
+                    </div>
+                </div>
+                <div class="mt-4 flex items-center text-green-500 text-sm">
+                    <i class="fas fa-arrow-up mr-1"></i>
+                    <span>+2.3% vs mes anterior</span>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-xl shadow-md p-6">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-gray-500 text-sm">Tasa de Aprobación</p>
+                        <p class="text-3xl font-bold text-gray-800 mt-2">85%</p>
+                    </div>
+                    <div class="bg-green-100 p-3 rounded-lg">
+                        <i class="fas fa-check-circle text-green-600 text-xl"></i>
+                    </div>
+                </div>
+                <div class="mt-4 flex items-center text-green-500 text-sm">
+                    <i class="fas fa-arrow-up mr-1"></i>
+                    <span>+5% vs mes anterior</span>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-xl shadow-md p-6">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-gray-500 text-sm">Temas con Dificultad</p>
+                        <p class="text-3xl font-bold text-gray-800 mt-2">3</p>
+                    </div>
+                    <div class="bg-yellow-100 p-3 rounded-lg">
+                        <i class="fas fa-exclamation-triangle text-yellow-600 text-xl"></i>
+                    </div>
+                </div>
+                <div class="mt-4 flex items-center text-red-500 text-sm">
+                    <i class="fas fa-arrow-down mr-1"></i>
+                    <span>-1 vs mes anterior</span>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-xl shadow-md p-6">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-gray-500 text-sm">Exámenes Realizados</p>
+                        <p class="text-3xl font-bold text-gray-800 mt-2">24</p>
+                    </div>
+                    <div class="bg-purple-100 p-3 rounded-lg">
+                        <i class="fas fa-file-alt text-purple-600 text-xl"></i>
+                    </div>
+                </div>
+                <div class="mt-4 flex items-center text-green-500 text-sm">
+                    <i class="fas fa-arrow-up mr-1"></i>
+                    <span>+8 vs mes anterior</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gráficos y visualizaciones -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+            <!-- Gráfico de rendimiento por estudiante -->
+            <div class="bg-white rounded-xl shadow-md p-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Rendimiento por Estudiante</h3>
+                <div class="chart-container" style="height: 300px;">
+                    <canvas id="studentPerformanceChart"></canvas>
+                </div>
+            </div>
+            
+            <!-- Distribución de calificaciones -->
+            <div class="bg-white rounded-xl shadow-md p-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Distribución de Calificaciones</h3>
+                <div class="chart-container" style="height: 300px;">
+                    <canvas id="gradesDistributionChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Análisis de IA -->
+        <div class="bg-white rounded-xl shadow-md p-6 mb-6">
+            <h3 class="text-lg font-semibold text-gray-800 mb-4">Análisis con Inteligencia Artificial</h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Recomendaciones de IA -->
+                <div class="bg-blue-50 rounded-lg p-4">
+                    <div class="flex items-center mb-3">
+                        <i class="fas fa-robot text-blue-500 text-xl mr-2"></i>
+                        <h4 class="font-semibold text-blue-800">Recomendaciones de IA</h4>
+                    </div>
+                    
+                    <div class="space-y-3">
+                        <div class="bg-white p-3 rounded-lg border border-blue-200">
+                            <div class="flex justify-between items-start mb-1">
+                                <span class="font-medium text-blue-700">Tema: Geometría</span>
+                                <span class="text-xs bg-red-100 text-red-800 px-2 py-1 rounded">Alta dificultad</span>
+                            </div>
+                            <p class="text-sm text-blue-600">Los estudiantes muestran dificultades en cálculo de áreas de figuras compuestas. Recomendamos ejercicios prácticos adicionales.</p>
+                        </div>
+                        
+                        <div class="bg-white p-3 rounded-lg border border-blue-200">
+                            <div class="flex justify-between items-start mb-1">
+                                <span class="font-medium text-blue-700">Estudiante: Carlos Méndez</span>
+                                <span class="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded">Atención requerida</span>
+                            </div>
+                            <p class="text-sm text-blue-600">Ha disminuido su rendimiento en un 15% este mes. Sugerimos una sesión de refuerzo individual.</p>
+                        </div>
+                        
+                        <div class="bg-white p-3 rounded-lg border border-blue-200">
+                            <div class="flex justify-between items-start mb-1">
+                                <span class="font-medium text-blue-700">Estrategia de enseñanza</span>
+                                <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">Oportunidad</span>
+                            </div>
+                            <p class="text-sm text-blue-600">Los estudiantes responden mejor a ejemplos visuales. Considere incorporar más diagramas en sus explicaciones.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Tendencias y predicciones -->
+                <div class="bg-purple-50 rounded-lg p-4">
+                    <div class="flex items-center mb-3">
+                        <i class="fas fa-chart-line text-purple-500 text-xl mr-2"></i>
+                        <h4 class="font-semibold text-purple-800">Tendencias y Predicciones</h4>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="text-sm font-medium text-purple-700">Proyección de rendimiento</span>
+                                <span class="text-sm font-medium text-purple-700">+5.2%</span>
+                            </div>
+                            <div class="w-full bg-purple-200 rounded-full h-2">
+                                <div class="bg-purple-600 h-2 rounded-full" style="width: 65%"></div>
+                            </div>
+                            <p class="text-xs text-purple-600 mt-1">Se espera una mejora del 5.2% en el próximo mes basado en tendencias actuales.</p>
+                        </div>
+                        
+                        <div>
+                            <h5 class="font-medium text-purple-700 mb-2">Temas que requieren atención:</h5>
+                            <div class="space-y-2">
+                                <div class="flex justify-between">
+                                    <span class="text-sm text-purple-600">Geometría avanzada</span>
+                                    <span class="text-sm text-purple-800 font-medium">42% de error</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-sm text-purple-600">Álgebra lineal</span>
+                                    <span class="text-sm text-purple-800 font-medium">38% de error</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-sm text-purple-600">Trigonometría</span>
+                                    <span class="text-sm text-purple-800 font-medium">35% de error</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white p-3 rounded-lg border border-purple-200">
+                            <p class="text-sm text-purple-600">
+                                <i class="fas fa-lightbulb text-yellow-500 mr-1"></i>
+                                <strong>Insight:</strong> Los estudiantes que practican con ejercicios interactivos muestran un 23% mejor retención.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabla de desempeño detallado -->
+        <div class="bg-white rounded-xl shadow-md p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-semibold text-gray-800">Desempeño Detallado por Estudiante</h3>
+                <button class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 flex items-center text-sm">
+                    <i class="fas fa-download mr-2"></i>
+                    Exportar Reporte
+                </button>
+            </div>
+            
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm text-left text-gray-700">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                        <tr>
+                            <th class="px-4 py-3">Estudiante</th>
+                            <th class="px-4 py-3">Asignatura</th>
+                            <th class="px-4 py-3">Último Examen</th>
+                            <th class="px-4 py-3">Promedio</th>
+                            <th class="px-4 py-3">Tendencia</th>
+                            <th class="px-4 py-3">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="bg-white border-b hover:bg-gray-50">
+                            <td class="px-4 py-3 font-medium">Ana Rodríguez</td>
+                            <td class="px-4 py-3">Matemáticas</td>
+                            <td class="px-4 py-3">85%</td>
+                            <td class="px-4 py-3">82%</td>
+                            <td class="px-4 py-3">
+                                <div class="flex items-center text-green-500">
+                                    <i class="fas fa-arrow-up mr-1"></i>
+                                    <span>+3%</span>
+                                </div>
+                            </td>
+                            <td class="px-4 py-3">
+                                <button class="text-blue-600 hover:text-blue-800 text-sm">Ver detalles</button>
+                            </td>
+                        </tr>
+                        <tr class="bg-white border-b hover:bg-gray-50">
+                            <td class="px-4 py-3 font-medium">Carlos Méndez</td>
+                            <td class="px-4 py-3">Matemáticas</td>
+                            <td class="px-4 py-3">72%</td>
+                            <td class="px-4 py-3">75%</td>
+                            <td class="px-4 py-3">
+                                <div class="flex items-center text-red-500">
+                                    <i class="fas fa-arrow-down mr-1"></i>
+                                    <span>-5%</span>
+                                </div>
+                            </td>
+                            <td class="px-4 py-3">
+                                <button class="text-blue-600 hover:text-blue-800 text-sm">Ver detalles</button>
+                            </td>
+                        </tr>
+                        <tr class="bg-white border-b hover:bg-gray-50">
+                            <td class="px-4 py-3 font-medium">María González</td>
+                            <td class="px-4 py-3">Matemáticas</td>
+                            <td class="px-4 py-3">91%</td>
+                            <td class="px-4 py-3">88%</td>
+                            <td class="px-4 py-3">
+                                <div class="flex items-center text-green-500">
+                                    <i class="fas fa-arrow-up mr-1"></i>
+                                    <span>+7%</span>
+                                </div>
+                            </td>
+                            <td class="px-4 py-3">
+                                <button class="text-blue-600 hover:text-blue-800 text-sm">Ver detalles</button>
+                            </td>
+                        </tr>
+                        <tr class="bg-white border-b hover:bg-gray-50">
+                            <td class="px-4 py-3 font-medium">Juan Pérez</td>
+                            <td class="px-4 py-3">Matemáticas</td>
+                            <td class="px-4 py-3">68%</td>
+                            <td class="px-4 py-3">70%</td>
+                            <td class="px-4 py-3">
+                                <div class="flex items-center text-green-500">
+                                    <i class="fas fa-arrow-up mr-1"></i>
+                                    <span>+2%</span>
+                                </div>
+                            </td>
+                            <td class="px-4 py-3">
+                                <button class="text-blue-600 hover:text-blue-800 text-sm">Ver detalles</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Gráfico de rendimiento por estudiante
+            const studentCtx = document.getElementById('studentPerformanceChart').getContext('2d');
+            const studentChart = new Chart(studentCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Ana R.', 'Carlos M.', 'María G.', 'Juan P.', 'Laura S.', 'Pedro V.'],
+                    datasets: [{
+                        label: 'Calificación Promedio (%)',
+                        data: [82, 75, 88, 70, 85, 78],
+                        backgroundColor: 'rgba(59, 130, 246, 0.7)',
+                        borderColor: 'rgba(59, 130, 246, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: {
+                                callback: function(value) {
+                                    return value + '%';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Gráfico de distribución de calificaciones
+            const distributionCtx = document.getElementById('gradesDistributionChart').getContext('2d');
+            const distributionChart = new Chart(distributionCtx, {
+                type: 'pie',
+                data: {
+                    labels: ['Excelente (90-100%)', 'Bueno (80-89%)', 'Regular (70-79%)', 'Necesita mejora (<70%)'],
+                    datasets: [{
+                        data: [15, 35, 30, 20],
+                        backgroundColor: [
+                            'rgba(34, 197, 94, 0.7)',
+                            'rgba(59, 130, 246, 0.7)',
+                            'rgba(245, 158, 11, 0.7)',
+                            'rgba(239, 68, 68, 0.7)'
+                        ],
+                        borderColor: [
+                            'rgba(34, 197, 94, 1)',
+                            'rgba(59, 130, 246, 1)',
+                            'rgba(245, 158, 11, 1)',
+                            'rgba(239, 68, 68, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+            
+            // Generar reporte
+            document.getElementById('generateReportBtn').addEventListener('click', function() {
+                Swal.fire({
+                    title: 'Generando reporte',
+                    text: 'Analizando datos y generando visualizaciones...',
+                    icon: 'info',
+                    showConfirmButton: false,
+                    allowOutsideClick: false
+                });
+                
+                setTimeout(() => {
+                    Swal.fire({
+                        title: 'Reporte generado',
+                        text: 'El reporte ha sido actualizado con los filtros seleccionados.',
+                        icon: 'success',
+                        confirmButtonText: 'Continuar',
+                        confirmButtonColor: '#3b82f6'
+                    });
+                }, 1500);
+            });
+        });
+    </script>
+</body>
+</html>
